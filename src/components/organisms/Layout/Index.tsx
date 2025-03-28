@@ -11,13 +11,18 @@ export default function Layout(props: any) {
             </Link>
           </li>
           <li>
-            <Link href="/usuarios/usuarioPage">
-              <span className="hover:text-gray-600">Usuários</span>
+            <Link href="/custos/custoPage">
+              <span className="hover:text-gray-600">Criar Custos</span>
             </Link>
           </li>
           <li>
-            <Link href="/usuarios/usuarioNovo">
-              <span className="hover:text-gray-600">Usuário[basic]</span>
+            <Link href="/usuarios/lista">
+              <span className="hover:text-gray-600">Lista Usuários</span>
+            </Link>
+          </li>
+          <li>
+            <Link href="/usuarios/usuarioPage">
+              <span className="hover:text-gray-600">Criar Usuários</span>
             </Link>
           </li>
         </ul>

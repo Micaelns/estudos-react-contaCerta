@@ -1,61 +1,85 @@
-import React from "react";
-import { useForm } from "react-hook-form";
+import React, { useState } from "react";
 import InputField from "../../../atoms/InputField/Index";
 import CheckboxField from "../../../atoms/CheckboxField/Index";
-import Button from "../../../atoms/Button/Index";
 
+interface userProps {
+  onSubmit: (data: any) => void;
+}
 interface FormData {
   nickname: string;
   email: string;
-  isActive: boolean;
+  active: boolean;
 }
 
-const UserForm: React.FC = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>();
+export default function UserForm(props: userProps) {
+  const [error, setError] = useState("");
+  const [formData, setFormData] = useState<FormData>({
+    nickname: "",
+    email: "",
+    active: false,
+  });
 
-  const onSubmit = (data: FormData) => {
-    console.log("Dados enviados:", data);
+  const validateEmail = (email: string) => {
+    return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value, type, checked } = e.target;
+
+    setFormData({
+      ...formData,
+      [name]: type === "checkbox" ? checked : value,
+    });
+
+    if (name === "email") {
+      setError(validateEmail(value) ? "" : "E-mail digitado é inválido.");
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    props.onSubmit(formData);
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4">
       <InputField
         id="nickname"
         label="Apelido"
         type="text"
-        register={register("nickname", { required: "Apelido é obrigatório" })}
-        error={errors.nickname?.message}
+        error={error}
+        placeholder="Digite como gostaria de ser chamado"
+        value={formData.nickname}
+        handleChange={handleChange}
       />
 
       <InputField
         id="email"
         label="E-mail"
         type="email"
-        register={register("email", {
-          required: "E-mail é obrigatório",
-          pattern: {
-            value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-            message: "E-mail inválido",
-          },
-        })}
-        error={errors.email?.message}
+        required={true}
+        error={error}
+        placeholder="Digite seu email"
+        value={formData.email}
+        handleChange={handleChange}
       />
 
       <CheckboxField
-        id="isActive"
+        id="active"
         label="Ativo"
-        register={register("isActive")}
+        value={formData.active}
+        handleChange={handleChange}
       />
 
-      <div className="flex justify-end">
-        <Button text="Salvar" type="submit" onSubmit={handleSubmit(onSubmit)} />
-      </div>
+      <button
+        type="submit"
+        className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition"
+      >
+        Enviar
+      </button>
     </form>
   );
-};
-
-export default UserForm;
+}
