@@ -1,12 +1,12 @@
 import { FaUserCheck, FaUserSlash } from "react-icons/fa";
 
-interface ElementData {
+interface ElementProps {
   nick: string;
   email: string;
   active: boolean;
 }
 
-export default function ElementUser({ nick, email, active }: ElementData) {
+export default function ElementUser({ nick, email, active }: ElementProps) {
   return (
     <div className="p-2 border rounded-md w-64 shadow-sm bg-white flex flex-col items-center">
       <div className="flex items-center justify-center mb-1">

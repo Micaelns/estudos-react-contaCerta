@@ -17,7 +17,7 @@ export default function UserListPage() {
   return (
     <Layout>
       <div>
-        <h1 className="text-xl font-bold mb-4">Lista de Usuário</h1>
+        <h1 className="text-xl font-bold mb-4">Lista de Usuários</h1>
         <ElementList>
           {elementsUsers?.map((element) => (
             <ElementUser key={element.email} {...element} />
