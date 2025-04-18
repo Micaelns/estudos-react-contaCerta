@@ -1,48 +1,76 @@
-import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import {
+  FaMoneyCheckAlt,
+  FaUser,
+  FaRegCalendarCheck,
+  FaInfoCircle,
+} from "react-icons/fa";
 
 interface ElementProps {
   title: string;
-  value: string;
-  paymentDate?: string;
+  description: string;
+  value: number;
+  paymentDate: any;
+  owner: string;
+  summary: SummaryUserCost;
   active: boolean;
+}
+
+interface SummaryUserCost {
+  TotalUsers: number;
+  CountPaid: number;
+  TotalPaid: number;
 }
 
 export default function ElementCost({
   title,
+  description,
   value,
   paymentDate,
+  owner,
+  summary,
   active,
 }: ElementProps) {
+  console.log("==>", summary);
   return (
-    <div className="p-4 border rounded-lg w-56 shadow-md bg-white flex flex-col items-center">
-      <div className="text-sm font-bold text-gray-800 text-center">{title}</div>
-
+    <div className="p-3 border rounded-md w-72 shadow-sm bg-white flex flex-col items-center">
       <div className="flex items-center justify-center mb-2">
-        {active ? (
-          <FaCheckCircle className="size-16 text-green-500" />
-        ) : (
-          <FaTimesCircle className="size-16 text-gray-400" />
-        )}
+        <FaMoneyCheckAlt
+          className={`size-14 ${active ? "text-green-500" : "text-gray-400"}`}
+        />
       </div>
-      <div className="text-sm text-gray-700 font-semibold">
-        {new Intl.NumberFormat("pt-BR", {
-          style: "currency",
-          currency: "BRL",
-        }).format(value)}
+
+      <div className="text-sm font-semibold text-gray-800 text-center">
+        {title}
       </div>
-      {paymentDate && (
-        <div className="text-xs text-gray-600">
-          {new Date(paymentDate).toLocaleDateString("pt-BR")}
+
+      {description && (
+        <div className="text-[11px] italic text-gray-600 text-center mb-1">
+          {description}
         </div>
       )}
+      <div className="text-xs mt-2 text-gray-600 flex items-center gap-1">
+        <FaInfoCircle className="text-gray-500" />
+        Pago: R$ {summary.totalPaid.toFixed(2)} ({" "}
+        {((summary.countPaid / summary.totalUsers) * 100).toFixed(2)}% )
+      </div>
 
-      {!paymentDate && (
-        <div className="text-xs text-gray-600">Sem previsão</div>
-      )}
+      <div className="text-xs text-gray-600 flex items-center gap-1">
+        <FaUser className="text-gray-500" />
+        {owner}
+      </div>
+
+      <div className="text-xs text-gray-600 flex items-center gap-1">
+        <FaRegCalendarCheck className="text-gray-500" />
+        {paymentDate ?? "Sem data"}
+      </div>
+
+      <div className="text-xs font-semibold text-gray-700 mt-1">
+        Valor: R$ {value.toFixed(2)}
+      </div>
 
       <div
-        className={`mt-2 px-2 py-1 text-xs font-bold rounded-md ${
-          active ? "bg-green-100 text-green-700" : "bg-red-100 text-red-600"
+        className={`mt-2 text-[10px] font-semibold ${
+          active ? "text-green-600" : "text-red-500"
         }`}
       >
         {active ? "Ativo" : "Inativo"}
