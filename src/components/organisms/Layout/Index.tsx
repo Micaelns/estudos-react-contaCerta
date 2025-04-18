@@ -1,5 +1,4 @@
 import Menu from "@/components/molecules/Menu/Index";
-import Link from "next/link";
 
 export default function Layout(props: any) {
   return (

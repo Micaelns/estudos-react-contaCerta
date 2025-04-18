@@ -36,8 +36,16 @@ export default function Menu() {
             <Link href="/">
               <MenuItem icon={<FaHome />} text="Início" />
             </Link>
-            <SubMenu title="Custos" elements={elementsCost} />
-            <SubMenu title="Usuários" elements={elementsUser} />
+            <SubMenu
+              title="Custos"
+              key="elementsCost"
+              elements={elementsCost}
+            />
+            <SubMenu
+              title="Usuários"
+              key="elementsUser"
+              elements={elementsUser}
+            />
             <MenuItem icon={<FaSignOutAlt />} text="Sair" />
           </ul>
         </div>

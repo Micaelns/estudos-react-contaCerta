@@ -25,9 +25,12 @@ export default function SubMenu(props: ElementProps) {
         />
       </div>
       {isOpen && (
-        <ul className="absolute left-0 mt-2 w-40 bg-gray-800 rounded shadow-lg overflow-hidden">
+        <ul
+          key={`ul-${props.title}`}
+          className="absolute left-0 mt-2 w-40 bg-gray-800 rounded shadow-lg overflow-hidden"
+        >
           {props.elements.map((element: SubElementProps) => (
-            <Link href={element.linkPage}>
+            <Link href={element.linkPage} key={element.linkPage}>
               <SubMenuItem text={element.text} />
             </Link>
           ))}
