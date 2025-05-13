@@ -1,3 +1,4 @@
+import { useAuth } from "@/data/contexts/authContext";
 import { useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import MenuItem from "./MenuItem";
@@ -5,8 +6,9 @@ import SubMenu from "./SubMenu";
 import { FaHome, FaSignOutAlt } from "react-icons/fa";
 import Link from "next/link";
 
-export default function Menu() {
+export default function Menu(props: any) {
   const [isOpen, setIsOpen] = useState(false);
+  const { logoff } = useAuth();
 
   var elementsCost = [
     { text: "Criar", linkPage: "/custos/custoPage" },
@@ -46,7 +48,7 @@ export default function Menu() {
               key="elementsUser"
               elements={elementsUser}
             />
-            <MenuItem icon={<FaSignOutAlt />} text="Sair" />
+            <MenuItem icon={<FaSignOutAlt />} click={logoff} text="Sair" />
           </ul>
         </div>
 
