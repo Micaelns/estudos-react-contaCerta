@@ -1,5 +1,6 @@
 import { useReducer, useEffect } from "react";
 import apiService from "../services/apiService";
+import { useAuth } from "../contexts/authContext";
 
 interface Cost {
   id: number;
@@ -49,23 +50,33 @@ const costReducer = (state: State, action: Action): State => {
 };
 
 export const useCostReducer = () => {
-  const [state, dispatch] = useReducer(costReducer, initialState);
+  const [stateLast, dispatchLast] = useReducer(costReducer, initialState);
+  const [stateNext, dispatchNext] = useReducer(costReducer, initialState);
+  const { loggedUser } = useAuth();
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      dispatch({ type: "START" });
-      try {
-        const costs = await apiService.get(
-          "/cost/last?email=micael.ns@hotmail.com"
-        );
-        dispatch({ type: "SUCCESS", payload: costs.data });
-      } catch (error: any) {
-        dispatch({ type: "ERROR", payload: error.message });
-      }
-    };
+  const fetchLastCosts = async () => {
+    dispatchLast({ type: "START" });
+    try {
+      const costs = await apiService.get(
+        "/cost/last?email=" + loggedUser?.email
+      );
+      dispatchLast({ type: "SUCCESS", payload: costs.data });
+    } catch (error: any) {
+      dispatchLast({ type: "ERROR", payload: error.message });
+    }
+  };
 
-    fetchUsers();
-  }, []);
+  const fetchNextCosts = async () => {
+    dispatchNext({ type: "START" });
+    try {
+      const costs = await apiService.get(
+        "/cost/next?email=" + loggedUser?.email
+      );
+      dispatchNext({ type: "SUCCESS", payload: costs.data });
+    } catch (error: any) {
+      dispatchNext({ type: "ERROR", payload: error.message });
+    }
+  };
 
-  return state;
+  return { stateLast, fetchLastCosts, stateNext, fetchNextCosts };
 };

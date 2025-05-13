@@ -1,9 +1,8 @@
 import { useAuth } from "@/data/contexts/authContext";
-import { useState } from "react";
-import { FaBars, FaTimes } from "react-icons/fa";
 import MenuItem from "./MenuItem";
 import SubMenu from "./SubMenu";
-import { FaHome, FaSignOutAlt } from "react-icons/fa";
+import { useState } from "react";
+import { FaHome, FaBars, FaSignOutAlt, FaTimes } from "react-icons/fa";
 import Link from "next/link";
 
 export default function Menu(props: any) {

@@ -30,7 +30,6 @@ export default function ElementCost({
   summary,
   active,
 }: ElementProps) {
-  console.log("==>", summary);
   return (
     <div className="p-3 border rounded-md w-72 shadow-sm bg-white flex flex-col items-center">
       <div className="flex items-center justify-center mb-2">
