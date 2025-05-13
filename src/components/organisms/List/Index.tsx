@@ -1,7 +1,7 @@
 import NoDataMessage from "@/components/molecules/NoDataMessage/Index";
-import { FaSpinner } from "react-icons/fa";
 import { ReactNode } from "react";
 import ErrorMessage from "@/components/molecules/ErrorMessage/Index";
+import Loading from "@/components/atoms/Loading/Index";
 
 interface ElementProps {
   loading: boolean;
@@ -15,11 +15,7 @@ export default function ElementList({
   error = "",
 }: ElementProps) {
   if (loading) {
-    return (
-      <div className="flex justify-center items-center">
-        <FaSpinner className="text-gray-900 animate-spin size-6" />
-      </div>
-    );
+    return <Loading />;
   }
   if (error != null) {
     return (
