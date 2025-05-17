@@ -2,17 +2,33 @@ import ElementList from "../../components/organisms/List/Index";
 import Layout from "@/components/organisms/Layout/Index";
 import ElementCost from "@/components/molecules/Cost/Index";
 import { useCostReducer } from "../../data/hooks/costReducer";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ElementTab from "@/components/organisms/Tab/Index";
+import Modal from "@/components/molecules/Modal/Index";
+import ElementUserCost from "@/components/molecules/UserCost/Index";
+import Loading from "@/components/atoms/Loading/Index";
 
 export default function UserListPage() {
-  const { stateLast, fetchLastCosts, stateNext, fetchNextCosts } =
-    useCostReducer();
+  const {
+    stateLast,
+    fetchLastCosts,
+    stateNext,
+    fetchNextCosts,
+    stateUserCosts,
+    fetchUserCosts,
+  } = useCostReducer();
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     fetchLastCosts();
     fetchNextCosts();
   }, []);
+
+  const detailsCost = (idCost: number) => {
+    //console.log("Vai detalhar aqui[lista] => ", idCost);
+    fetchUserCosts(idCost);
+    setIsOpen(true);
+  };
 
   const lastElements = () => {
     return (
@@ -21,6 +37,7 @@ export default function UserListPage() {
           <ElementCost
             key={element.title || element.paymentDate}
             {...element}
+            onClick={detailsCost}
           />
         ))}
       </ElementList>
@@ -34,6 +51,7 @@ export default function UserListPage() {
           <ElementCost
             key={element.title || element.paymentDate}
             {...element}
+            onClick={detailsCost}
           />
         ))}
       </ElementList>
@@ -55,6 +73,19 @@ export default function UserListPage() {
     <Layout>
       <div>
         <ElementTab tabs={elements} initialIndex={1} />
+        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+          <h2 className="text-xl font-bold mb-4">Detalhes</h2>
+          <div className="flex">
+            <ElementList
+              loading={stateUserCosts.loading}
+              error={stateUserCosts.error}
+            >
+              {stateUserCosts.costs?.map((element) => (
+                <ElementUserCost key={element.email} {...element} />
+              ))}
+            </ElementList>
+          </div>
+        </Modal>
       </div>
     </Layout>
   );

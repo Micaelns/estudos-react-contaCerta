@@ -52,6 +52,10 @@ const costReducer = (state: State, action: Action): State => {
 export const useCostReducer = () => {
   const [stateLast, dispatchLast] = useReducer(costReducer, initialState);
   const [stateNext, dispatchNext] = useReducer(costReducer, initialState);
+  const [stateUserCosts, dispatchUserCosts] = useReducer(
+    costReducer,
+    initialState
+  );
   const { loggedUser } = useAuth();
 
   const fetchLastCosts = async () => {
@@ -78,5 +82,22 @@ export const useCostReducer = () => {
     }
   };
 
-  return { stateLast, fetchLastCosts, stateNext, fetchNextCosts };
+  const fetchUserCosts = async (costId: number) => {
+    dispatchUserCosts({ type: "START" });
+    try {
+      const costs = await apiService.get("/cost/" + costId + "/users");
+      dispatchUserCosts({ type: "SUCCESS", payload: costs.data });
+    } catch (error: any) {
+      dispatchUserCosts({ type: "ERROR", payload: error.message });
+    }
+  };
+
+  return {
+    stateLast,
+    fetchLastCosts,
+    stateNext,
+    fetchNextCosts,
+    stateUserCosts,
+    fetchUserCosts,
+  };
 };
