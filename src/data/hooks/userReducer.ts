@@ -39,6 +39,7 @@ const userReducer = (state: State, action: Action): State => {
 
 export const useUserReducer = () => {
   const [state, dispatch] = useReducer(userReducer, initialState);
+  const [stateCreate, dispatchCreate] = useReducer(userReducer, initialState);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -54,5 +55,23 @@ export const useUserReducer = () => {
     fetchUsers();
   }, []);
 
-  return state;
+  const createUser = async (userData: any) => {
+    dispatchCreate({ type: "START" });
+    try {
+      const user = await apiService.post("/users", userData);
+      console.log("++++ passando aqui");
+      dispatchCreate({ type: "SUCCESS", payload: user.data });
+    } catch (error: any) {
+      if (typeof error?.response?.data === "string") {
+        dispatchCreate({ type: "ERROR", payload: error.response.data });
+      } else {
+        dispatchCreate({
+          type: "ERROR",
+          payload: "Ocorreu um erro interno, tente novamente em instantes",
+        });
+      }
+    }
+  };
+
+  return { state, stateCreate, createUser };
 };

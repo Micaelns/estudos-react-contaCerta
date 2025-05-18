@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import ElementTab from "@/components/organisms/Tab/Index";
 import Modal from "@/components/molecules/Modal/Index";
 import ElementUserCost from "@/components/molecules/UserCost/Index";
-import Loading from "@/components/atoms/Loading/Index";
 
 export default function UserListPage() {
   const {
@@ -25,7 +24,6 @@ export default function UserListPage() {
   }, []);
 
   const detailsCost = (idCost: number) => {
-    //console.log("Vai detalhar aqui[lista] => ", idCost);
     fetchUserCosts(idCost);
     setIsOpen(true);
   };

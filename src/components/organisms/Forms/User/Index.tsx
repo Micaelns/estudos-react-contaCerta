@@ -1,23 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputField from "../../../atoms/InputField/Index";
 import CheckboxField from "../../../atoms/CheckboxField/Index";
 
 interface userProps {
+  resetFormSignal: number;
   onSubmit: (data: any) => void;
 }
 interface FormData {
   nickname: string;
   email: string;
   active: boolean;
+  password: string;
+  isPublicEmail: boolean;
 }
 
 export default function UserForm(props: userProps) {
-  const [error, setError] = useState("");
-  const [formData, setFormData] = useState<FormData>({
+  const dataDefault: FormData = {
     nickname: "",
     email: "",
+    password: "",
     active: false,
-  });
+    isPublicEmail: true,
+  };
+  const [error, setError] = useState("");
+  const [formData, setFormData] = useState<FormData>(dataDefault);
+
+  useEffect(() => {
+    setFormData(dataDefault);
+  }, [props.resetFormSignal]);
 
   const validateEmail = (email: string) => {
     return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
@@ -50,7 +60,6 @@ export default function UserForm(props: userProps) {
         id="nickname"
         label="Apelido"
         type="text"
-        error={error}
         placeholder="Digite como gostaria de ser chamado"
         value={formData.nickname}
         handleChange={handleChange}
@@ -64,6 +73,23 @@ export default function UserForm(props: userProps) {
         error={error}
         placeholder="Digite seu email"
         value={formData.email}
+        handleChange={handleChange}
+      />
+
+      <InputField
+        id="password"
+        label="Senha"
+        type="password"
+        required={true}
+        placeholder="Digite sua senha"
+        value={formData.password}
+        handleChange={handleChange}
+      />
+
+      <CheckboxField
+        id="isPublicEmail"
+        label="E-mail será publico?"
+        value={formData.isPublicEmail}
         handleChange={handleChange}
       />
 

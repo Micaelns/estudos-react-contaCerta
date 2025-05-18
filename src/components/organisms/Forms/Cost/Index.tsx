@@ -1,9 +1,10 @@
 import CheckboxField from "@/components/atoms/CheckboxField/Index";
 import InputField from "@/components/atoms/InputField/Index";
 import InputTextArea from "@/components/atoms/InputTextArea/Index";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface costProps {
+  resetFormSignal: number;
   onSubmit: (data: any) => void;
 }
 
@@ -13,23 +14,27 @@ interface FormData {
   value: number;
   paymentDate?: string;
   active: boolean;
-  createdAt: string;
 }
 
 export default function CostForm(props: costProps) {
-  const [formData, setFormData] = useState<FormData>({
+  const dataDefault: FormData = {
     title: "",
     description: "",
     value: 0,
     paymentDate: "",
     active: false,
-    createdAt: new Date().toISOString(),
-  });
+  };
+
+  const [formData, setFormData] = useState<FormData>(dataDefault);
 
   const [error, setError] = useState("");
 
+  useEffect(() => {
+    setFormData(dataDefault);
+  }, [props.resetFormSignal]);
+
   const validateTitle = (title: string) => {
-    return /^[a-zA-Z0-9]{6,}$/.test(title);
+    return title.length > 6;
   };
 
   const handleChange = (
@@ -96,6 +101,7 @@ export default function CostForm(props: costProps) {
         type="date"
         placeholder="Selecione a data"
         value={formData.paymentDate}
+        required={true}
         handleChange={handleChange}
       />
 

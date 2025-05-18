@@ -1,4 +1,4 @@
-import { useReducer, useEffect } from "react";
+import { useReducer } from "react";
 import apiService from "../services/apiService";
 import { useAuth } from "../contexts/authContext";
 
@@ -11,6 +11,15 @@ interface Cost {
   owner: string;
   summary: SummaryUserCost;
   active: boolean;
+}
+
+interface FormData {
+  title: string;
+  description?: string;
+  value: number;
+  paymentDate?: string;
+  active: boolean;
+  email?: string;
 }
 
 interface SummaryUserCost {
@@ -50,6 +59,7 @@ const costReducer = (state: State, action: Action): State => {
 };
 
 export const useCostReducer = () => {
+  const [stateCost, dispatchCost] = useReducer(costReducer, initialState);
   const [stateLast, dispatchLast] = useReducer(costReducer, initialState);
   const [stateNext, dispatchNext] = useReducer(costReducer, initialState);
   const [stateUserCosts, dispatchUserCosts] = useReducer(
@@ -92,6 +102,24 @@ export const useCostReducer = () => {
     }
   };
 
+  const createCost = async (costData: FormData) => {
+    dispatchCost({ type: "START" });
+    try {
+      costData.email = loggedUser?.email;
+      const cost = await apiService.post("/cost", costData);
+      dispatchCost({ type: "SUCCESS", payload: cost.data });
+    } catch (error: any) {
+      if (typeof error?.response?.data === "string") {
+        dispatchCost({ type: "ERROR", payload: error.response.data });
+      } else {
+        dispatchCost({
+          type: "ERROR",
+          payload: "Ocorreu um erro interno, tente novamente em instantes",
+        });
+      }
+    }
+  };
+
   return {
     stateLast,
     fetchLastCosts,
@@ -99,5 +127,7 @@ export const useCostReducer = () => {
     fetchNextCosts,
     stateUserCosts,
     fetchUserCosts,
+    stateCost,
+    createCost,
   };
 };

@@ -13,11 +13,6 @@ interface ElementProps {
   paid_at?: string;
   paid: boolean;
 }
-// nickname,
-// email,
-// active,
-// value,
-// paymentDate,
 export default function ElementUserCost({
   user,
   value,
@@ -26,7 +21,6 @@ export default function ElementUserCost({
 }: ElementProps) {
   return (
     <div className="p-3 border rounded-lg w-48 shadow-md bg-white flex flex-col gap-2">
-      {/* Cabeçalho do usuário */}
       <div className="flex items-center gap-2">
         {user.active ? (
           <FaUserCheck className="text-green-500 w-8 h-8" />
@@ -41,7 +35,6 @@ export default function ElementUserCost({
         </div>
       </div>
 
-      {/* Valor + ícone de status */}
       <div className="text-xs flex justify-between items-center">
         <span className="text-gray-800 font-semibold">
           R$ {value.toFixed(2)}
@@ -55,7 +48,6 @@ export default function ElementUserCost({
         </Tooltip>
       </div>
 
-      {/* Data de pagamento */}
       <span className="text-[10px] text-center text-gray-500">{paid_at}</span>
     </div>
   );
